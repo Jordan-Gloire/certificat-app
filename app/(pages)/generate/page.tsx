@@ -4,7 +4,6 @@ import { jsPDF } from "jspdf";
 import { useState } from "react";
 import Header from "../../components/Header";
 import { FaFilePdf, FaArrowRight } from "react-icons/fa";
-import Image from "next/image";
 
 export default function GenerateCertificates() {
   const [formData, setFormData] = useState({
