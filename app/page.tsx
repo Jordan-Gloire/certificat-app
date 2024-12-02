@@ -7,15 +7,21 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 text-gray-800">
+      <main className="min-h-screen text-gray-800">
         {/* Hero Section */}
-        <section className="relative flex items-center justify-center h-[80vh] text-center">
-          <div className="absolute inset-0 bg-gradient-to-tr from-blue-400 to-blue-600 opacity-20"></div>
+        <section
+          className="relative flex items-center justify-center h-screen text-center bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/home (1).jpg')",
+          }}
+        >
+          {/* Overlay noir avec opacité */}
+          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
           <div className="relative z-10">
-            <h2 className="text-4xl font-extrabold text-blue-800 md:text-6xl">
+            <h2 className="text-4xl font-extrabold text-white md:text-6xl">
               Simplifiez votre gestion de certificats
             </h2>
-            <p className="mt-4 text-lg text-gray-700">
+            <p className="mt-4 text-lg text-gray-300">
               Une application intuitive et sécurisée pour générer, gérer et
               partager vos certificats en quelques clics.
             </p>
