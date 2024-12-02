@@ -28,7 +28,7 @@ export default function Home() {
             <div className="mt-6 flex justify-center space-x-4">
               <Link
                 href="/about"
-                className="px-6 py-3 text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105"
+                className="px-6 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105"
               >
                 Découvrir
               </Link>
@@ -36,7 +36,7 @@ export default function Home() {
               {/* Nouveau bouton Commencez avec icône */}
               <Link
                 href="/generate"
-                className="px-6 py-3 text-blue-600 bg-white rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
+                className="px-6 py-3 text-[#0071bc] bg-white rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
               >
                 <FaFilePdf className="w-5 h-5" />
                 <span>Commencez</span>

@@ -11,7 +11,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-blue-600 text-white shadow-md">
+    <header className="bg-[#0071bc] text-white shadow-md">
       <div className="container mx-auto flex items-center justify-between px-6 py-4">
         <Link href="/" className="text-xl font-bold">
           Cabinet Lee Management

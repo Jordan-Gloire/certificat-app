@@ -27,7 +27,8 @@
   "**/*.ts",
   "**/*.tsx",
   ".next/types/**/*.ts",
-  "heroicons.d.ts"   // Ajoute cette ligne
+  "heroicons.d.ts" ,
+  "types/**/*.d.ts"  // Ajoute cette ligne
 ],
   "exclude": ["node_modules"]
 }
