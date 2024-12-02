@@ -10,14 +10,14 @@ export default function Home() {
       <main className="min-h-screen text-gray-800">
         {/* Hero Section */}
         <section
-          className="relative flex items-center justify-center h-screen text-center bg-cover bg-center"
+          className="relative flex items-center justify-center h-screen  text-center bg-cover bg-center"
           style={{
-            backgroundImage: "url('/home (1).jpg')",
+            backgroundImage: "url('/home (4).jpg')",
           }}
         >
           {/* Overlay noir avec opacité */}
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-          <div className="relative z-10">
+          <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+          <div className="relative z-10 mx-4 lg:mx-0">
             <h2 className="text-4xl font-extrabold text-white md:text-6xl">
               Simplifiez votre gestion de certificats
             </h2>
