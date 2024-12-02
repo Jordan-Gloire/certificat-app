@@ -1,7 +1,6 @@
 // pages/generate.tsx
 "use client";
 import { jsPDF } from "jspdf";
-
 import { useState } from "react";
 import Header from "../../components/Header";
 import { FaFilePdf, FaArrowRight } from "react-icons/fa";
@@ -12,6 +11,7 @@ export default function GenerateCertificates() {
     certificateType: "",
     issueDate: "",
   });
+  const [showPreview, setShowPreview] = useState(false); // State pour afficher l'aperçu
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -19,6 +19,7 @@ export default function GenerateCertificates() {
       ...prevData,
       [name]: value,
     }));
+    setShowPreview(true); // Met à jour l'aperçu dès que l'utilisateur modifie un champ
   };
 
   // const handleSubmit = (e: React.FormEvent) => {
@@ -27,19 +28,18 @@ export default function GenerateCertificates() {
   //   console.log("Certificat généré pour", formData);
   // };
 
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  const { name, certificateType, issueDate } = formData;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const { name, certificateType, issueDate } = formData;
 
-  const doc = new jsPDF();
-  doc.setFontSize(20);
-  doc.text("Certificat de " + certificateType, 20, 30);
-  doc.text("Nom : " + name, 20, 40);
-  doc.text("Date d'émission : " + issueDate, 20, 50);
-  doc.save("certificat.pdf");  // Télécharge le PDF
-  console.log("Certificat généré");
-};
-
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Certificat de " + certificateType, 20, 30);
+    doc.text("Nom : " + name, 20, 40);
+    doc.text("Date d'émission : " + issueDate, 20, 50);
+    doc.save("certificat.pdf"); // Télécharge le PDF
+    console.log("Certificat généré");
+  };
 
   return (
     <>
@@ -101,7 +101,7 @@ const handleSubmit = (e: React.FormEvent) => {
                     htmlFor="issueDate"
                     className="block text-lg font-medium text-blue-700"
                   >
-                    Date d'émission
+                    {"Date d'émission"}
                   </label>
                   <input
                     type="date"
@@ -128,6 +128,25 @@ const handleSubmit = (e: React.FormEvent) => {
               </div>
             </form>
           </div>
+          {/* Section d'aperçu */}
+          {showPreview && (
+            <div className="mt-12 max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+              <h3 className="text-2xl font-bold text-blue-800">
+                Aperçu du certificat
+              </h3>
+              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-lg font-semibold text-blue-700">
+                  Certificat de {formData.certificateType}
+                </p>
+                <p className="mt-2 text-md text-gray-700">
+                  Nom : {formData.name}
+                </p>
+                <p className="mt-2 text-md text-gray-700">
+                  {"Date d'émission :"} {formData.issueDate}
+                </p>
+              </div>
+            </div>
+          )}
         </section>
       </main>
     </>

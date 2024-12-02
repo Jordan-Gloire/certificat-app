@@ -17,9 +17,9 @@ export default function About() {
       <main className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 text-gray-800">
         <header className="text-black text-center py-4">
           <div className="container mx-auto px-6">
-            <h1 className="text-2xl font-bold">À propos de l'application</h1>
+            <h1 className="text-2xl font-bold">{"À propos de l'application"}</h1>
             <p className="mt-2">
-              Tout ce que vous devez savoir sur l'application de gestion de certificats.
+              {"Tout ce que vous devez savoir sur l'application de gestion de certificats."}
             </p>
           </div>
         </header>
@@ -56,7 +56,7 @@ export default function About() {
           </ul>
         </section>
         <section className="container mx-auto px-6 py-12">
-          <h2 className="text-3xl font-bold text-blue-800">Comment utiliser l'application</h2>
+          <h2 className="text-3xl font-bold text-blue-800">{"Comment utiliser l'application"}</h2>
           <ol className="mt-6 space-y-4">
             <li className="p-4 bg-white rounded-lg shadow-md flex items-start space-x-4">
               <FaUserCircle className="w-8 h-8 text-blue-600" />
@@ -84,7 +84,7 @@ export default function About() {
         <footer className="bg-gray-100 py-6">
           <div className="container mx-auto px-6 text-center">
             <Link href="/" className="text-blue-600 hover:underline">
-              Retour à l'accueil
+              {"Retour à l'accueil"}
             </Link>
           </div>
         </footer>
