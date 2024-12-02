@@ -4,6 +4,7 @@ import { jsPDF } from "jspdf";
 import { useState } from "react";
 import Header from "../../components/Header";
 import { FaFilePdf, FaArrowRight } from "react-icons/fa";
+import Image from "next/image";
 
 export default function GenerateCertificates() {
   const [formData, setFormData] = useState({
@@ -28,18 +29,54 @@ export default function GenerateCertificates() {
   //   console.log("Certificat généré pour", formData);
   // };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const { name, certificateType, issueDate } = formData;
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const { name, certificateType, issueDate } = formData;
 
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Certificat de " + certificateType, 20, 30);
-    doc.text("Nom : " + name, 20, 40);
-    doc.text("Date d'émission : " + issueDate, 20, 50);
-    doc.save("certificat.pdf"); // Télécharge le PDF
-    console.log("Certificat généré");
+  //   const doc = new jsPDF();
+  //   doc.setFontSize(20);
+  //   doc.text("Certificat de " + certificateType, 20, 30);
+  //   doc.text("Nom : " + name, 20, 40);
+  //   doc.text("Date d'émission : " + issueDate, 20, 50);
+  //   doc.save("certificat.pdf"); // Télécharge le PDF
+  //   console.log("Certificat généré");
+  // };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    const { name, certificateType, issueDate } = formData;
+  
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "px",
+      format: [842, 595], // Taille A4 en pixels
+    });
+  
+    // Ajouter l'image du certificat comme arrière-plan
+    const imageUrl = "/model-certificat.png"; // Chemin vers l'image du modèle
+    const imgWidth = 842; // Largeur de l'image
+    const imgHeight = 595; // Hauteur de l'image
+  
+    // Charger l'image
+    const img = await fetch(imageUrl).then((res) => res.blob());
+    const reader = new FileReader();
+    reader.onload = () => {
+      doc.addImage(reader.result as string, "JPEG", 0, 0, imgWidth, imgHeight);
+  
+      // Ajouter le texte dynamique
+      doc.setFontSize(20);
+      doc.text(name, 200, 300); // Coordonnées pour le nom
+      doc.text(certificateType, 200, 350); // Coordonnées pour le type
+      doc.text(issueDate, 200, 400); // Coordonnées pour la date
+  
+      // Télécharger le certificat
+      doc.save("certificat.pdf");
+    };
+    reader.readAsDataURL(img);
   };
+  
+
+
 
   return (
     <>
@@ -128,25 +165,38 @@ export default function GenerateCertificates() {
               </div>
             </form>
           </div>
-          {/* Section d'aperçu */}
-          {showPreview && (
-            <div className="mt-12 max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-300">
-              <h3 className="text-2xl font-bold text-blue-800">
-                Aperçu du certificat
-              </h3>
-              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-lg font-semibold text-blue-700">
-                  Certificat de {formData.certificateType}
-                </p>
-                <p className="mt-2 text-md text-gray-700">
-                  Nom : {formData.name}
-                </p>
-                <p className="mt-2 text-md text-gray-700">
-                  {"Date d'émission :"} {formData.issueDate}
-                </p>
-              </div>
-            </div>
-          )}
+{/* Section d'aperçu */}
+{showPreview && (
+  <div className="mt-12 max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+    <h3 className="text-2xl font-bold text-blue-800 mb-4 text-center">
+      Aperçu du certificat
+    </h3>
+
+    {/* Conteneur du certificat */}
+    <div
+      className="relative w-full h-[595px] mx-auto bg-no-repeat bg-cover border border-blue-200 rounded-lg"
+      style={{
+        backgroundImage: `url('/certificate_template.jpg')`, // Assure-toi que le chemin est correct
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Texte dynamique sur le certificat */}
+      <div className="absolute top-[30%] left-[20%] text-left">
+        <p className="text-xl font-bold text-blue-900">
+          Certificat de {formData.certificateType}
+        </p>
+        <p className="text-lg text-gray-800 mt-2">
+          Nom : {formData.name}
+        </p>
+        <p className="text-lg text-gray-800 mt-2">
+          Date d'émission : {formData.issueDate}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
+
         </section>
       </main>
     </>
