@@ -11,6 +11,7 @@ export default function GenerateCertificates() {
     name: "",
     certificateType: "",
     issueDate: "",
+    ville: "",
   });
   const [showPreview, setShowPreview] = useState(false); // State pour afficher l'aperçu
 
@@ -23,24 +24,6 @@ export default function GenerateCertificates() {
     setShowPreview(true); // Met à jour l'aperçu dès que l'utilisateur modifie un champ
   };
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   // Logique pour générer un PDF ici
-  //   console.log("Certificat généré pour", formData);
-  // };
-
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const { name, certificateType, issueDate } = formData;
-
-  //   const doc = new jsPDF();
-  //   doc.setFontSize(20);
-  //   doc.text("Certificat de " + certificateType, 20, 30);
-  //   doc.text("Nom : " + name, 20, 40);
-  //   doc.text("Date d'émission : " + issueDate, 20, 50);
-  //   doc.save("certificat.pdf"); // Télécharge le PDF
-  //   console.log("Certificat généré");
-  // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
@@ -150,6 +133,24 @@ export default function GenerateCertificates() {
                     className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
+                {/* Ville*/}
+                <div>
+                  <label
+                    htmlFor="issueDate"
+                    className="block text-lg font-medium text-blue-700"
+                  >
+                    {"Ville"}
+                  </label>
+                  <input
+                    type="text"
+                    id="ville"
+                    name="ville"
+                    value={formData.ville}
+                    onChange={handleChange}
+                    required
+                    className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
 
                 {/* Bouton de génération */}
                 <div className="mt-6 flex justify-center">
@@ -176,7 +177,7 @@ export default function GenerateCertificates() {
     <div
       className="relative w-full h-[595px] mx-auto bg-no-repeat bg-cover border border-blue-200 rounded-lg"
       style={{
-        backgroundImage: `url('/certificate_template.jpg')`, // Assure-toi que le chemin est correct
+        backgroundImage: `url('/model-certificat.png')`, // Assure-toi que le chemin est correct
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -184,13 +185,16 @@ export default function GenerateCertificates() {
       {/* Texte dynamique sur le certificat */}
       <div className="absolute top-[30%] left-[20%] text-left">
         <p className="text-xl font-bold text-blue-900">
-          Certificat de {formData.certificateType}
+          {formData.certificateType}
         </p>
         <p className="text-lg text-gray-800 mt-2">
-          Nom : {formData.name}
+          {formData.name}
         </p>
         <p className="text-lg text-gray-800 mt-2">
-          Date d'émission : {formData.issueDate}
+          {formData.issueDate}
+        </p>
+        <p className="text-lg text-gray-800 mt-2">
+           {formData.ville}
         </p>
       </div>
     </div>
