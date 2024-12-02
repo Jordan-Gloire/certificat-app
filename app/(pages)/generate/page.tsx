@@ -65,7 +65,7 @@ export default function GenerateCertificates() {
       <Header />
       <main className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 text-gray-800">
         <section className="container mx-auto px-6 py-12">
-          <h2 className="text-4xl font-extrabold text-blue-800 text-center">
+          <h2 className="text-4xl font-extrabold text-[#0071bc] text-center">
             Générer vos certificats
           </h2>
           <p className="mt-4 text-lg text-gray-700 text-center">
@@ -80,7 +80,7 @@ export default function GenerateCertificates() {
                 <div>
                   <label
                     htmlFor="name"
-                    className="block text-lg font-medium text-blue-700"
+                    className="block text-lg font-medium text-[#0071bc]"
                   >
                     Nom du participant
                   </label>
@@ -99,7 +99,7 @@ export default function GenerateCertificates() {
                 <div>
                   <label
                     htmlFor="certificateType"
-                    className="block text-lg font-medium text-blue-700"
+                    className="block text-lg font-medium text-[#0071bc]"
                   >
                     Type de certificat
                   </label>
@@ -118,7 +118,7 @@ export default function GenerateCertificates() {
                 <div>
                   <label
                     htmlFor="issueDate"
-                    className="block text-lg font-medium text-blue-700"
+                    className="block text-lg font-medium text-[#0071bc]"
                   >
                     {"Date d'émission"}
                   </label>
@@ -136,7 +136,7 @@ export default function GenerateCertificates() {
                 <div>
                   <label
                     htmlFor="issueDate"
-                    className="block text-lg font-medium text-blue-700"
+                    className="block text-lg font-medium text-[#0071bc]"
                   >
                     {"Ville"}
                   </label>
@@ -155,7 +155,7 @@ export default function GenerateCertificates() {
                 <div className="mt-6 flex justify-center">
                   <button
                     type="submit"
-                    className="px-8 py-3 text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
+                    className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
                   >
                     <FaFilePdf className="w-5 h-5" />
                     <span>Générer le certificat</span>
@@ -168,7 +168,7 @@ export default function GenerateCertificates() {
 {/* Section d'aperçu */}
 {showPreview && (
   <div className="mt-12 max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-300">
-    <h3 className="text-2xl font-bold text-blue-800 mb-4 text-center">
+    <h3 className="text-2xl font-bold text-[#0071bc] mb-4 text-center">
       Aperçu du certificat
     </h3>
 
@@ -183,13 +183,13 @@ export default function GenerateCertificates() {
     >
       {/* Texte dynamique sur le certificat */}
       <div className="absolute top-[30%] left-[20%] text-left">
-        <p className="text-xl font-bold text-blue-900">
+        <p className="text-xl font-bold text-[#0071bc]">
           {formData.certificateType}
         </p>
-        <p className="text-lg text-gray-800 mt-2">
+        <p className="text-6xl text-center font-bold text-gray-800 mt-2">
           {formData.name}
         </p>
-        <p className="text-lg text-gray-800 mt-2">
+        <p className="text-lg text-gray-800 mt-[200px]">
           {formData.issueDate}
         </p>
         <p className="text-lg text-gray-800 mt-2">

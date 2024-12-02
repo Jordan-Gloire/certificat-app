@@ -2,17 +2,19 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import Header from '@/app/components/Header';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const dashboard: React.FC = () => {
+const StatisticsPage: React.FC = () => {
   const data = {
     labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai'],
     datasets: [
       {
         label: 'Certificats générés',
         data: [5, 10, 15, 20, 12],
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        backgroundColor: '#0071bc',
+        borderRadius: 10,
       },
     ],
   };
@@ -21,23 +23,46 @@ const dashboard: React.FC = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        display: false,
       },
       title: {
         display: true,
         text: 'Certificats générés par mois',
+        font: {
+          size: 18,
+        },
+        color: '#0071bc',
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: '#333',
+        },
+      },
+      y: {
+        ticks: {
+          color: '#333',
+        },
       },
     },
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Statistiques</h2>
-      <div className="bg-white shadow p-4 rounded">
+    <>
+    <Header/>
+        <div className="p-6 bg-white  shadow-lg h-screen">
+      <h2 className="text-2xl font-bold text-[#0071bc] m-6">Statistiques</h2>
+      <div className="bg-[#f9f9f9] p-4 rounded-lg shadow-md">
         <Bar data={data} options={options} />
       </div>
-    </div>
+
+    </div>    
+    </>
   );
 };
 
-export default dashboard;
+export default StatisticsPage;
