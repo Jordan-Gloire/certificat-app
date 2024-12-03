@@ -128,7 +128,7 @@ export default function GenerateCertificates() {
                     htmlFor="issueDate"
                     className="block text-lg font-medium text-[#0071bc]"
                   >
-                    {"Date d'émission"}
+                    {"Date émission"}
                   </label>
                   <input
                     type="date"
