@@ -200,7 +200,7 @@ export default function GenerateCertificates() {
   </div>
 )}
 
-        </section>
+      </section>
       </main>
     </>
   );
