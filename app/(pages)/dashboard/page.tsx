@@ -54,7 +54,7 @@ const StatisticsPage: React.FC = () => {
   return (
     <>
     <Header/>
-        <div className="p-6 bg-white  shadow-lg h-screen">
+        <div className="p-6 bg-white">
       <h2 className="text-2xl font-bold text-[#0071bc] m-6">Statistiques</h2>
       <div className="bg-[#f9f9f9] p-4 rounded-lg shadow-md">
         <Bar data={data} options={options} />

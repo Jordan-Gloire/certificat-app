@@ -1,10 +1,12 @@
-// pages/generate.tsx
 "use client";
 import { jsPDF } from "jspdf";
 import { useState } from "react";
 import Header from "../../components/Header";
 import { FaFilePdf, FaArrowRight } from "react-icons/fa";
 import { addCerti } from "@/app/actions/addCerti";
+import { Bounce, toast, ToastContainer } from "react-toastify"; // Importation de Toastify
+import "react-toastify/dist/ReactToastify.css"; // Importation des styles de Toastify
+
 export default function GenerateCertificates() {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -12,7 +14,8 @@ export default function GenerateCertificates() {
     issueDate: "",
     city: "",
   });
-  const [showPreview, setShowPreview] = useState(false); // State pour afficher l'aperçu
+
+  // const [showPreview, setShowPreview] = useState(false); // State pour afficher l'aperçu
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,57 +23,93 @@ export default function GenerateCertificates() {
       ...prevData,
       [name]: value,
     }));
-    setShowPreview(true); // Met à jour l'aperçu dès que l'utilisateur modifie un champ
+    // setShowPreview(true); // Met à jour l'aperçu dès que l'utilisateur modifie un champ
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const { fullName, certificateType, issueDate, city } = formData;
-    // Étape 1 : Envoyer les données au backend pour les enregistrer dans la base de données
-    const formattedIssueDate = new Date(issueDate);
-    const savedCertification = await addCerti({
-      fullName,
-      certificateType,
-      issueDate: formattedIssueDate.toISOString(),
-      city,
-    });
-    console.log("Certificat enregistré ", savedCertification);
 
-    // Étape 2 : Générer le certificat PDF
-    const doc = new jsPDF({
-      orientation: "landscape",
-      unit: "px",
-      format: [842, 595], // Taille A4 en pixels
-    });
+    try {
+      // Étape 1 : Envoyer les données au backend pour les enregistrer dans la base de données
+      const formattedIssueDate = new Date(issueDate);
+      const savedCertification = await addCerti({
+        fullName,
+        certificateType,
+        issueDate: formattedIssueDate.toISOString(),
+        city,
+      });
+      console.log("Certificat enregistré ", savedCertification);
 
-    // Ajouter l'image du certificat comme arrière-plan
-    const imageUrl = "/model-certificat.png"; // Chemin vers l'image du modèle
-    const imgWidth = 842; // Largeur de l'image
-    const imgHeight = 595; // Hauteur de l'image
+      // Étape 2 : Générer le certificat PDF
+      const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "px",
+        format: [842, 595], // Taille A4 en pixels
+      });
 
-    // Charger l'image
-    const img = await fetch(imageUrl).then((res) => res.blob());
-    const reader = new FileReader();
-    reader.onload = () => {
-      doc.addImage(reader.result as string, "JPEG", 0, 0, imgWidth, imgHeight);
+      // Ajouter l'image du certificat comme arrière-plan
+      const imageUrl = "/model-certificat.png"; // Chemin vers l'image du modèle
+      const imgWidth = 842; // Largeur de l'image
+      const imgHeight = 595; // Hauteur de l'image
 
-      // Ajouter le texte dynamique
-      doc.setFontSize(20);
-      doc.text(fullName, 200, 300); // Coordonnées pour le nom
-      doc.text(certificateType, 200, 350); // Coordonnées pour le type
-      doc.text(issueDate, 200, 400); // Coordonnées pour la date
-      doc.text(city, 200, 400); // Coordonnées pour la date
+      // Charger l'image
+      const img = await fetch(imageUrl).then((res) => res.blob());
+      const reader = new FileReader();
+      reader.onload = () => {
+        doc.addImage(reader.result as string, "JPEG", 0, 0, imgWidth, imgHeight);
 
-      // Télécharger le certificat
-      doc.save("certificat.pdf");
-    };
-    reader.readAsDataURL(img);
+        // Ajouter le texte dynamique
+        doc.setFontSize(20);
+        doc.text(fullName, 200, 300); // Coordonnées pour le nom
+        doc.text(certificateType, 200, 350); // Coordonnées pour le type
+        doc.text(issueDate, 200, 400); // Coordonnées pour la date
+        doc.text(city, 200, 450); // Coordonnées pour la ville
+
+        // Télécharger le certificat
+        doc.save("certificat.pdf");
+
+        // Afficher un toast de confirmation
+        toast.success("📄 Certificat téléchargé avec succès !", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+         // Réinitialiser le formulaire
+      setFormData({
+        fullName: "",
+        certificateType: "",
+        issueDate: "",
+        city: "",
+      });
+      };
+      reader.readAsDataURL(img);
+    } catch (error) {
+      console.error("Erreur lors de la génération du certificat :", error);
+      toast.error("❌ Une erreur est survenue lors de la génération !", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   };
 
   return (
     <>
       <Header />
+      <ToastContainer /> {/* Conteneur React Toastify */}
       <main className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 text-gray-800">
         <section className="container mx-auto px-6 py-12">
           <h2 className="text-4xl font-extrabold text-[#0071bc] text-center">
@@ -140,10 +179,10 @@ export default function GenerateCertificates() {
                     className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                {/* city*/}
+                {/* city */}
                 <div>
                   <label
-                    htmlFor="issueDate"
+                    htmlFor="city"
                     className="block text-lg font-medium text-[#0071bc]"
                   >
                     {"Ville"}
@@ -173,38 +212,6 @@ export default function GenerateCertificates() {
               </div>
             </form>
           </div>
-          {/* Section d'aperçu */}
-          {showPreview && (
-            <div className="mt-12 max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-300">
-              <h3 className="text-2xl font-bold text-[#0071bc] mb-4 text-center">
-                Aperçu du certificat
-              </h3>
-
-              {/* Conteneur du certificat */}
-              <div
-                className="relative w-full h-[595px] mx-auto bg-no-repeat bg-cover border border-blue-200 rounded-lg"
-                style={{
-                  backgroundImage: `url('/model-certificat.png')`, // Assure-toi que le chemin est correct
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                {/* Texte dynamique sur le certificat */}
-                <div className="absolute top-[30%] left-[20%] text-left">
-                  <p className="text-xl font-bold text-[#0071bc]">
-                    {formData.certificateType}
-                  </p>
-                  <p className="text-6xl text-center font-bold text-gray-800 mt-2">
-                    {formData.fullName}
-                  </p>
-                  <p className="text-lg text-gray-800 mt-[200px]">
-                    {formData.issueDate}
-                  </p>
-                  <p className="text-lg text-gray-800 mt-2">{formData.city}</p>
-                </div>
-              </div>
-            </div>
-          )}
         </section>
       </main>
     </>
