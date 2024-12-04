@@ -1,19 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 
-declare global {
-  // Évite les conflits de typage pour `globalThis.prisma`
-  const prisma: PrismaClient | undefined;
+const prismaClientSingleton = () => {
+  return new PrismaClient()
 }
 
-const prisma =
-  globalThis.prisma ??
-  new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-  });
+declare const globalThis: {
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
+} & typeof global;
 
-// En développement, conserve l'instance dans `globalThis` pour éviter des multiples instanciations.
-if (process.env.NODE_ENV === 'development') {
-  globalThis.prisma = prisma;
-}
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
 
-export default prisma;
+export default prisma
