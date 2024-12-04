@@ -49,7 +49,7 @@ export default function GenerateCertificates() {
         format: [842, 595], // Taille A4 en pixels
       });
 
-      // Ajouter l'image du certificat comme arrière-plan
+      // Ajout l'image du certificat comme arrière-plan
       const imageUrl = "/model-certificat.png"; // Chemin vers l'image du modèle
       const imgWidth = 842; // Largeur de l'image
       const imgHeight = 595; // Hauteur de l'image
