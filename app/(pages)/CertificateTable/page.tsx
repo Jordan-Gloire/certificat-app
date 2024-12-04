@@ -29,7 +29,7 @@ const CertificateTable: React.FC = () => {
       setError('');
       try {
         const certificates = await getCertificates(); // Appel à la Server Action
-        setData(certificates.certificates);
+        setData(certificates);
       } catch (err) {
         setError('Erreur lors de la récupération des certificats.');
         console.error(err);
