@@ -147,5 +147,4 @@ const CertificateTable: React.FC = () => {
     </>
   );
 };
-
 export default CertificateTable;
