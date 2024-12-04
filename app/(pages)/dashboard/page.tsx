@@ -12,7 +12,7 @@ const StatisticsPage: React.FC = () => {
     datasets: [
       {
         label: 'Certificats générés',
-        data: [5, 10, 15, 20, 12],
+        data: [5, 10, 15, 20, 120],
         backgroundColor: '#0071bc',
         borderRadius: 10,
       },
