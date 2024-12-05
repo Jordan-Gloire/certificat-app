@@ -1,5 +1,4 @@
 "use server";
-// app/actions/certificateActions.ts
 import prisma from '@/lib/db';
 
 export const getCertificates = async () => {
