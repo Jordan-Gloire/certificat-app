@@ -1,7 +1,8 @@
-// "use client";
+"use client";
 import Link from "next/link";
 import Header from "./components/Header";
 import { FaFilePdf, FaArrowRight } from "react-icons/fa"; // Importer les icônes de React Icons
+import { Typewriter } from "react-simple-typewriter";
 
 export default function Home() {
   return (
@@ -19,7 +20,16 @@ export default function Home() {
           <div className="absolute inset-0 bg-black bg-opacity-60"></div>
           <div className="relative z-10 mx-4 lg:mx-0">
             <h2 className="text-4xl font-extrabold text-white md:text-6xl">
-              Simplifiez votre gestion de certificats
+              <Typewriter
+                words={["Simplifiez", "Gérez", "Organisez"]}
+                loop={5}
+                cursor
+                cursorStyle="!"
+                typeSpeed={70}
+                deleteSpeed={50}
+                delaySpeed={1000}
+              />{" "}
+              votre gestion de certificats
             </h2>
             <p className="mt-4 text-lg text-gray-300">
               Une application intuitive et sécurisée pour générer, gérer et
