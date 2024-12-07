@@ -21,14 +21,14 @@ export default function Home() {
           <div className="relative z-10 mx-4 lg:mx-0">
             <h2 className="text-4xl font-extrabold text-white md:text-6xl">
               <Typewriter
-                words={["Simplifiez", "Gérez", "Organisez"]}
-                loop={5}
+                words={["Organisez ", "Gérez ", "Simplifiez "]}
+                loop={1}
                 cursor
-                cursorStyle="!"
+                cursorStyle=""
                 typeSpeed={70}
                 deleteSpeed={50}
                 delaySpeed={1000}
-              />{" "}
+              />
               votre gestion de certificats
             </h2>
             <p className="mt-4 text-lg text-gray-300">
