@@ -15,15 +15,15 @@ export default function GenerateCertificates() {
     city: "",
   });
 
-  // const [showPreview, setShowPreview] = useState(false); // State pour afficher l'aperçu
+  const [showPreview, setShowPreview] = useState(false); // State pour afficher l'aperçu
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    // setShowPreview(true); // Met à jour l'aperçu dès que l'utilisateur modifie un champ
+    setShowPreview(true); // Met à jour l'aperçu dès que l'utilisateur modifie un champ
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,7 +58,14 @@ export default function GenerateCertificates() {
       const img = await fetch(imageUrl).then((res) => res.blob());
       const reader = new FileReader();
       reader.onload = () => {
-        doc.addImage(reader.result as string, "JPEG", 0, 0, imgWidth, imgHeight);
+        doc.addImage(
+          reader.result as string,
+          "JPEG",
+          0,
+          0,
+          imgWidth,
+          imgHeight
+        );
 
         // Ajouter le texte dynamique
         doc.setFontSize(20);
@@ -82,13 +89,13 @@ export default function GenerateCertificates() {
           theme: "light",
           transition: Bounce,
         });
-         // Réinitialiser le formulaire
-      setFormData({
-        fullName: "",
-        certificateType: "",
-        issueDate: "",
-        city: "",
-      });
+        // Réinitialiser le formulaire
+        setFormData({
+          fullName: "",
+          certificateType: "",
+          issueDate: "",
+          city: "",
+        });
       };
       reader.readAsDataURL(img);
     } catch (error) {
@@ -150,7 +157,7 @@ export default function GenerateCertificates() {
                   >
                     Type de certificat
                   </label>
-                  <input
+                  {/* <input
                     type="text"
                     id="certificateType"
                     name="certificateType"
@@ -158,7 +165,20 @@ export default function GenerateCertificates() {
                     onChange={handleChange}
                     required
                     className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  /> */}
+                  <select
+                    required
+                    value={formData.certificateType}
+                    onChange={handleChange}
+                    className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    name="certificateType"
+                    id="certificateType"
+                  >
+                    <option value="">-- Selectionnez --</option>
+                    <option value="Fin-de-formation">Fin de formation</option>
+                    <option value="Fin-de-stage">Fin de stage</option>
+                    <option value="Participation">Participation</option>
+                  </select>
                 </div>
 
                 {/* Date d'émission */}
@@ -187,7 +207,7 @@ export default function GenerateCertificates() {
                   >
                     {"Ville"}
                   </label>
-                  <input
+                  {/* <input
                     type="text"
                     id="city"
                     name="city"
@@ -195,7 +215,19 @@ export default function GenerateCertificates() {
                     onChange={handleChange}
                     required
                     className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  /> */}
+                  <select
+                    className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                    name="city"
+                    id="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                  >
+                    <option value="">-- Selectionnez --</option>
+                    <option value="pointe-noire">Pointe-Noire</option>
+                    <option value="brazzaville">Brazzaville</option>
+                  </select>
                 </div>
 
                 {/* Bouton de génération */}
@@ -212,6 +244,38 @@ export default function GenerateCertificates() {
               </div>
             </form>
           </div>
+          {/* Section d'aperçu */}
+          {showPreview && (
+            <div className="mt-12 max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+              <h3 className="text-2xl font-bold text-[#0071bc] mb-4 text-center">
+                Aperçu du certificat
+              </h3>
+
+              {/* Conteneur du certificat */}
+              <div
+                className="relative w-full h-[595px] mx-auto bg-no-repeat bg-cover border border-blue-200 rounded-lg"
+                style={{
+                  backgroundImage: 'url("/model-certificat.png")',
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              >
+                {/* Texte dynamique sur le certificat */}
+                <div className="absolute top-[30%] left-[20%] text-left">
+                  <p className="text-xl font-bold text-[#0071bc]">
+                    {formData.certificateType}
+                  </p>
+                  <p className="text-6xl text-center font-bold text-gray-800 mt-2">
+                    {formData.fullName}
+                  </p>
+                  <p className="text-lg text-gray-800 mt-[200px]">
+                    {formData.issueDate}
+                  </p>
+                  <p className="text-lg text-gray-800 mt-2">{formData.city}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
       </main>
     </>
