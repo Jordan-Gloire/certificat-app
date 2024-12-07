@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,13 +15,15 @@ const Header: React.FC = () => {
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         {/* Logo */}
         <div className="flex items-center">
-          <Image
-            src="/logoLee.png" // Remplacez par le chemin de votre logo
-            alt="CertiGen Logo"
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
+          <Link href="/">
+            <Image
+              src="/logoLee.png"
+              alt="CertiGen Logo"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+          </Link>
           <h1 className="ml-3 text-lg font-bold">CertiApp</h1>
         </div>
 
@@ -30,14 +32,17 @@ const Header: React.FC = () => {
           <Link href="/" className="hover:underline transition duration-300">
             Accueil
           </Link>
-          <Link href="/CertificateTable" className="hover:underline transition duration-300">
+          <Link
+            href="/CertificateTable"
+            className="hover:underline transition duration-300"
+          >
             Tableau
           </Link>
-          <Link href="/dashboard" className="hover:underline transition duration-300">
+          <Link
+            href="/dashboard"
+            className="hover:underline transition duration-300"
+          >
             Statistiques
-          </Link>
-          <Link href="/contact" className="hover:underline transition duration-300">
-            Contact
           </Link>
         </nav>
 
@@ -50,17 +55,17 @@ const Header: React.FC = () => {
           <div className="space-y-1">
             <span
               className={`block w-6 h-0.5 bg-white transform transition duration-300 ${
-                menuOpen ? 'rotate-45 translate-y-1.5' : ''
+                menuOpen ? "rotate-45 translate-y-1.5" : ""
               }`}
             ></span>
             <span
               className={`block w-6 h-0.5 bg-white transform transition duration-300 ${
-                menuOpen ? 'opacity-0' : ''
+                menuOpen ? "opacity-0" : ""
               }`}
             ></span>
             <span
               className={`block w-6 h-0.5 bg-white transform transition duration-300 ${
-                menuOpen ? '-rotate-45 -translate-y-1.5' : ''
+                menuOpen ? "-rotate-45 -translate-y-1.5" : ""
               }`}
             ></span>
           </div>
@@ -70,21 +75,24 @@ const Header: React.FC = () => {
       {/* Menu Mobile */}
       <div
         className={`md:hidden bg-[#0071bc] text-white transition-all duration-300 overflow-hidden ${
-          menuOpen ? 'max-h-screen' : 'max-h-0'
+          menuOpen ? "max-h-screen" : "max-h-0"
         }`}
       >
         <nav className="flex flex-col space-y-4 py-4 px-6">
           <Link href="/" className="hover:underline transition duration-300">
             Accueil
           </Link>
-          <Link href="/CertificateTable" className="hover:underline transition duration-300">
+          <Link
+            href="/CertificateTable"
+            className="hover:underline transition duration-300"
+          >
             Tableau
           </Link>
-          <Link href="/dashboard" className="hover:underline transition duration-300">
+          <Link
+            href="/dashboard"
+            className="hover:underline transition duration-300"
+          >
             Statistiques
-          </Link>
-          <Link href="/contact" className="hover:underline transition duration-300">
-            Contact
           </Link>
         </nav>
       </div>
