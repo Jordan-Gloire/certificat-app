@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Header from "./components/Header";
 import { FaFilePdf, FaArrowRight } from "react-icons/fa"; // Importer les icônes de React Icons
-import { Typewriter } from "react-simple-typewriter";
+// import { Typewriter } from "react-simple-typewriter";
 
 export default function Home() {
   return (
