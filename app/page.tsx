@@ -21,7 +21,7 @@ export default function Home() {
           <div className="relative z-10 mx-4 lg:mx-0">
             <h2 className="text-4xl font-bold text-white md:text-6xl">
               Générez vos certificats en quelques clics <br />
-              <Typewriter
+              {/* <Typewriter
                 words={["Simplement", "Facilement"]}
                 loop={true}
                 cursor
@@ -29,7 +29,7 @@ export default function Home() {
                 typeSpeed={70}
                 deleteSpeed={50}
                 delaySpeed={1000}
-              />
+              /> */}
             </h2>
             <p className="mt-4 text-lg text-center text-gray-300">
               Cette application web vous simplifie la gestion des certificats.{" "}
