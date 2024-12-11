@@ -2,6 +2,7 @@
 import Header from '@/app/components/Header';
 import React, { useState, useEffect } from 'react';
 import { getCertificates } from '@/app/actions/getCerti';
+import Link from 'next/link';
 
 type Certificate = {
   id: number;
@@ -92,36 +93,44 @@ const CertificateTable: React.FC = () => {
         ) : (
           <div>
             <table className="w-full border-collapse overflow-hidden rounded-lg shadow-lg">
-              <thead className="bg-[#0071bc] text-white">
-                <tr>
-                  <th className="p-4 text-left">Nom</th>
-                  <th className="p-4 text-left">Type</th>
-                  <th className="p-4 text-left">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedData.length > 0 ? (
-                  paginatedData.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-[#0071bc] hover:text-white transition-colors duration-200"
-                    >
-                      <td className="p-4 border-t">{item.fullName}</td>
-                      <td className="p-4 border-t">{item.certificateType}</td>
-                      <td className="p-4 border-t">
-                        {new Date(item.issueDate).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={3} className="text-center p-6">
-                      Aucun certificat trouvé.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+  <thead className="bg-[#0071bc] text-white">
+    <tr>
+      <th className="p-4 text-left">Nom</th>
+      <th className="p-4 text-left">Type</th>
+      <th className="p-4 text-left">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {paginatedData.length > 0 ? (
+      paginatedData.map((item) => (
+        <tr key={item.id} className="hover:bg-[#0071bc] hover:text-white transition-colors duration-200">
+          <td className="p-4 border-t">
+            <Link href={`/CertificateTable/${item.id}`} className="block">
+              {item.fullName}
+            </Link>
+          </td>
+          <td className="p-4 border-t">
+            <Link href={`/CertificateTable/${item.id}`} className="block">
+              {item.certificateType}
+            </Link>
+          </td>
+          <td className="p-4 border-t">
+            <Link href={`/CertificateTable/${item.id}`} className="block">
+              {new Date(item.issueDate).toLocaleDateString()}
+            </Link>
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan={3} className="text-center p-6">
+          Aucun certificat trouvé.
+        </td>
+      </tr>
+    )}
+  </tbody>
+</table>
+
 
             {/* Pagination */}
             {totalPages > 1 && (
