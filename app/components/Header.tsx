@@ -14,8 +14,8 @@ const Header: React.FC = () => {
     <header className="bg-[#0071bc] text-white shadow-md">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         {/* Logo */}
-        <div className="flex items-center">
-          <Link href="/">
+        <div>
+          <Link className="flex items-center" href="/">
             <Image
               src="/logoLee.png"
               alt="CertiGen Logo"
@@ -23,8 +23,8 @@ const Header: React.FC = () => {
               height={40}
               className="rounded-full"
             />
+            <h1 className="ml-3 text-lg font-bold">CertiApp</h1>
           </Link>
-          <h1 className="ml-3 text-lg font-bold">CertiApp</h1>
         </div>
 
         {/* Menu Desktop */}

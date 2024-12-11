@@ -13,27 +13,31 @@ export default function Home() {
         <section
           className="relative flex items-center justify-center h-screen  text-center bg-cover bg-center"
           style={{
-            backgroundImage: "url('/home (4).jpg')",
+            backgroundImage: "url('/hero (2).jpg')",
           }}
         >
           {/* Overlay noir avec opacité */}
           <div className="absolute inset-0 bg-black bg-opacity-60"></div>
           <div className="relative z-10 mx-4 lg:mx-0">
-            <h2 className="text-4xl font-extrabold text-white md:text-6xl">
+            <h2 className="text-4xl font-bold text-white md:text-6xl">
+              Générez vos certificats en quelques clics <br />
               <Typewriter
-                words={["Organisez ", "Gérez ", "Simplifiez "]}
-                loop={1}
+                words={["Simplement", "Facilement"]}
+                loop={true}
                 cursor
-                cursorStyle=""
+                cursorStyle="|"
                 typeSpeed={70}
                 deleteSpeed={50}
                 delaySpeed={1000}
               />
-              votre gestion de certificats
             </h2>
-            <p className="mt-4 text-lg text-gray-300">
-              Une application intuitive et sécurisée pour générer, gérer et
-              partager vos certificats en quelques clics.
+            <p className="mt-4 text-lg text-center text-gray-300">
+              Cette application web vous simplifie la gestion des certificats.{" "}
+              <br />
+              Remplissez un formulaire ou importez un fichier Excel, et générez
+              rapidement des certificats personnalisés. <br /> Une solution
+              rapide, pratique et accessible pour automatiser la création de vos
+              documents officiels.
             </p>
             <div className="mt-6 flex justify-center space-x-4">
               <Link

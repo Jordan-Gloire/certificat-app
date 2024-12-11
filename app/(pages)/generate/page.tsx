@@ -1,8 +1,8 @@
 "use client";
 import { jsPDF } from "jspdf";
-import { useState } from "react";
+import React, { useState } from "react";
 import Header from "../../components/Header";
-import { FaFilePdf, FaArrowRight } from "react-icons/fa";
+import { FaFilePdf, FaFileExcel, FaArrowRight } from "react-icons/fa";
 import { addCerti } from "@/app/actions/addCerti";
 import { Bounce, toast, ToastContainer } from "react-toastify"; // Importation de Toastify
 import "react-toastify/dist/ReactToastify.css"; // Importation des styles de Toastify
@@ -14,10 +14,19 @@ export default function GenerateCertificates() {
     issueDate: "",
     city: "",
   });
+  const [fileName, setFileName] = useState("");
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setFileName(files[0].name);
+    }
+  };
   const [showPreview, setShowPreview] = useState(false); // State pour afficher l'aperçu
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -231,15 +240,57 @@ export default function GenerateCertificates() {
                 </div>
 
                 {/* Bouton de génération */}
-                <div className="mt-6 flex justify-center">
-                  <button
-                    type="submit"
-                    className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
-                  >
-                    <FaFilePdf className="w-5 h-5" />
-                    <span>Générer le certificat</span>
-                    <FaArrowRight className="w-5 h-5" />
-                  </button>
+                <div className="mt-6 grid grid-cols-1 gap-4">
+                  {/* Premier bouton : Générer le certificat */}
+                  <div className="flex justify-center">
+                    <button
+                      type="submit"
+                      className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
+                    >
+                      <FaFilePdf className="w-5 h-5" />
+                      <span>Générer le certificat</span>
+                      <FaArrowRight className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* Deuxième bouton : Importer fichier Excel */}
+                  <div className="flex justify-center">
+                    {/* Label pour le bouton personnalisé */}
+                    <label
+                      htmlFor="file-upload"
+                      className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2 cursor-pointer"
+                    >
+                      <FaFileExcel className="w-5 h-5" />
+                      <span>Importer fichier Excel</span>
+                      <FaArrowRight className="w-5 h-5" />
+                    </label>
+
+                    {/* Input de type file caché */}
+                    <input
+                      id="file-upload"
+                      type="file"
+                      className="hidden"
+                      accept=".xlsx, .xls"
+                      onChange={handleFileChange} // Gestion du changement de fichier
+                    />
+                  </div>
+                  {fileName && (
+                    <p className="mt-2 text-center text-sm text-gray-700">
+                      Fichier sélectionné : {fileName}
+                    </p>
+                  )}
+
+                  {/* Troisième bouton : Générer le certificat après import */}
+                  <div className="flex justify-center">
+                    <button
+                      type="submit"
+                      className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
+                    >
+                      <FaFilePdf className="w-5 h-5" />
+                      <span>Générer le certificat après import</span>
+                      <FaArrowRight className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </form>
