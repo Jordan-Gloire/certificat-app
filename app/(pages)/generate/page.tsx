@@ -10,8 +10,11 @@ import "react-toastify/dist/ReactToastify.css"; // Importation des styles de Toa
 export default function GenerateCertificates() {
   const [formData, setFormData] = useState({
     fullName: "",
-    certificateType: "",
     issueDate: "",
+    birthDate: "",
+    formationDateDebut: "",
+    formationDateFin: "",
+    formationOption: "",
     city: "",
   });
   const [fileName, setFileName] = useState("");
@@ -38,16 +41,27 @@ export default function GenerateCertificates() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { fullName, certificateType, issueDate, city } = formData;
+    const {
+      fullName,
+      issueDate,
+      city,
+      birthDate,
+      formationDateDebut,
+      formationDateFin,
+      formationOption,
+    } = formData;
 
     try {
       // Étape 1 : Envoyer les données au backend pour les enregistrer dans la base de données
       const formattedIssueDate = new Date(issueDate);
       const savedCertification = await addCerti({
         fullName,
-        certificateType,
         issueDate: formattedIssueDate.toISOString(),
         city,
+        birthDate,
+        formationDateDebut,
+        formationDateFin,
+        formationOption,
       });
       console.log("Certificat enregistré ", savedCertification);
 
@@ -79,7 +93,10 @@ export default function GenerateCertificates() {
         // Ajouter le texte dynamique
         doc.setFontSize(20);
         doc.text(fullName, 200, 300); // Coordonnées pour le nom
-        doc.text(certificateType, 200, 350); // Coordonnées pour le type
+        doc.text(birthDate, 200, 350); // Coordonnées pour le type
+        doc.text(formationDateFin, 200, 350); // Coordonnées pour le type
+        doc.text(formationDateDebut, 200, 350); // Coordonnées pour le type
+        doc.text(formationOption, 200, 350); // Coordonnées pour le type
         doc.text(issueDate, 200, 400); // Coordonnées pour la date
         doc.text(city, 200, 450); // Coordonnées pour la ville
 
@@ -101,7 +118,10 @@ export default function GenerateCertificates() {
         // Réinitialiser le formulaire
         setFormData({
           fullName: "",
-          certificateType: "",
+          birthDate: "",
+          formationDateDebut: "",
+          formationDateFin: "",
+          formationOption: "",
           issueDate: "",
           city: "",
         });
@@ -142,7 +162,7 @@ export default function GenerateCertificates() {
                 {/* Nom du participant */}
                 <div>
                   <label
-                    htmlFor="name"
+                    htmlFor="fullName"
                     className="block text-lg font-medium text-[#0071bc]"
                   >
                     Nom du participant
@@ -158,36 +178,23 @@ export default function GenerateCertificates() {
                   />
                 </div>
 
-                {/* Type de certificat */}
+                {/* Date de naissance */}
                 <div>
                   <label
-                    htmlFor="certificateType"
+                    htmlFor="birthDate"
                     className="block text-lg font-medium text-[#0071bc]"
                   >
-                    Type de certificat
+                    Date de naissance
                   </label>
-                  {/* <input
-                    type="text"
-                    id="certificateType"
-                    name="certificateType"
-                    value={formData.certificateType}
+                  <input
+                    type="date"
+                    id="birthDate"
+                    name="birthDate"
+                    value={formData.birthDate}
                     onChange={handleChange}
                     required
                     className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  /> */}
-                  <select
-                    required
-                    value={formData.certificateType}
-                    onChange={handleChange}
-                    className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="certificateType"
-                    id="certificateType"
-                  >
-                    <option value="">-- Selectionnez --</option>
-                    <option value="Fin-de-formation">Fin de formation</option>
-                    <option value="Fin-de-stage">Fin de stage</option>
-                    <option value="Participation">Participation</option>
-                  </select>
+                  />
                 </div>
 
                 {/* Date d'émission */}
@@ -196,7 +203,7 @@ export default function GenerateCertificates() {
                     htmlFor="issueDate"
                     className="block text-lg font-medium text-[#0071bc]"
                   >
-                    {"Date émission"}
+                    Date d'émission
                   </label>
                   <input
                     type="date"
@@ -208,23 +215,76 @@ export default function GenerateCertificates() {
                     className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                {/* city */}
+
+                {/* Date de début de formation */}
+                <div>
+                  <label
+                    htmlFor="formationDateDebut"
+                    className="block text-lg font-medium text-[#0071bc]"
+                  >
+                    Date de début de formation
+                  </label>
+                  <input
+                    type="date"
+                    id="formationDateDebut"
+                    name="formationDateDebut"
+                    value={formData.formationDateDebut}
+                    onChange={handleChange}
+                    required
+                    className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                {/* Date de fin de formation */}
+                <div>
+                  <label
+                    htmlFor="formationDateFin"
+                    className="block text-lg font-medium text-[#0071bc]"
+                  >
+                    Date de fin de formation
+                  </label>
+                  <input
+                    type="date"
+                    id="formationDateFin"
+                    name="formationDateFin"
+                    value={formData.formationDateFin}
+                    onChange={handleChange}
+                    required
+                    className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                {/* Option de formation */}
+                <div>
+                  <label
+                    htmlFor="formationOption"
+                    className="block text-lg font-medium text-[#0071bc]"
+                  >
+                    Option de formation
+                  </label>
+                  <select
+                    className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                    name="formationOption"
+                    id="formationOption"
+                    value={formData.formationOption}
+                    onChange={handleChange}
+                  >
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="Option 1">Option 1</option>
+                    <option value="Option 2">Option 2</option>
+                    <option value="Option 3">Option 3</option>
+                  </select>
+                </div>
+
+                {/* Ville */}
                 <div>
                   <label
                     htmlFor="city"
                     className="block text-lg font-medium text-[#0071bc]"
                   >
-                    {"Ville"}
+                    Ville
                   </label>
-                  {/* <input
-                    type="text"
-                    id="city"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                    className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  /> */}
                   <select
                     className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
@@ -233,7 +293,7 @@ export default function GenerateCertificates() {
                     value={formData.city}
                     onChange={handleChange}
                   >
-                    <option value="">-- Selectionnez --</option>
+                    <option value="">-- Sélectionnez --</option>
                     <option value="pointe-noire">Pointe-Noire</option>
                     <option value="brazzaville">Brazzaville</option>
                   </select>
@@ -255,7 +315,6 @@ export default function GenerateCertificates() {
 
                   {/* Deuxième bouton : Importer fichier Excel */}
                   <div className="flex justify-center">
-                    {/* Label pour le bouton personnalisé */}
                     <label
                       htmlFor="file-upload"
                       className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2 cursor-pointer"
@@ -265,7 +324,6 @@ export default function GenerateCertificates() {
                       <FaArrowRight className="w-5 h-5" />
                     </label>
 
-                    {/* Input de type file caché */}
                     <input
                       id="file-upload"
                       type="file"
@@ -306,7 +364,7 @@ export default function GenerateCertificates() {
               <div
                 className="relative w-full h-[595px] mx-auto bg-no-repeat bg-cover border border-blue-200 rounded-lg"
                 style={{
-                  backgroundImage: 'url("/model-certificat.png")',
+                  backgroundImage: 'url("/model-certificat.jpg")',
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}

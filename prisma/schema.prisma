@@ -8,11 +8,14 @@ datasource db {
 }
 
 model Certificate {
-  id              Int      @id @default(autoincrement())
-  fullName        String
-  city            String
-  issueDate       DateTime
-  certificateType String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                 Int       @id @default(autoincrement())
+  fullName           String
+  birthDate          String?
+  ciy                String
+  formationDateDebut DateTime?
+  formationDateFin   DateTime?
+  formationOption    String?
+  issueDate          DateTime
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
