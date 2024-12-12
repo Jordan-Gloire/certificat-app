@@ -13,7 +13,7 @@ import Link from "next/link";
 //   createdAt: Date;
 //   updatedAt: Date;
 // };
-interface Certificate {
+type Certificate = {
   id: number;
   fullName: string;
   city: string;
@@ -24,7 +24,7 @@ interface Certificate {
   formationOption: string | null;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 const CertificateTable: React.FC = () => {
   const [search, setSearch] = useState("");
