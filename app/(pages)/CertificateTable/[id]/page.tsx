@@ -6,9 +6,9 @@ import { Certificate } from "@prisma/client";
 export default async function page({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
-  const id = (await params).id
+  const id = (await params).id;
   let certificate: Certificate | null = null;
 
   try {
@@ -40,10 +40,10 @@ export default async function page({
                   <strong className="text-blue-600">Nom:</strong>{" "}
                   {certificate.fullName}
                 </p>
-                <p>
+                {/* <p>
                   <strong className="text-blue-600">Type:</strong>{" "}
                   {certificate.certificateType}
-                </p>
+                </p> */}
                 <p>
                   <strong className="text-blue-600">Date:</strong>{" "}
                   {new Date(certificate.issueDate).toLocaleDateString()}

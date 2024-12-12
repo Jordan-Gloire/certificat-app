@@ -1,38 +1,49 @@
 "use client";
-import Header from '@/app/components/Header';
-import React, { useState, useEffect } from 'react';
-import { getCertificates } from '@/app/actions/getCerti';
-import Link from 'next/link';
+import Header from "@/app/components/Header";
+import React, { useState, useEffect } from "react";
+import { getCertificates } from "@/app/actions/getCerti";
+import Link from "next/link";
 
-type Certificate = {
+// type Certificate = {
+//   id: number;
+//   fullName: string;
+//   city: string;
+//   issueDate: Date; // Remplacez 'string' par 'Date'
+//   certificateType: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+// };
+interface Certificate {
   id: number;
   fullName: string;
   city: string;
-  issueDate: Date; // Remplacez 'string' par 'Date'
-  certificateType: string;
+  issueDate: Date;
+  birthDate: string | null;
+  formationDateDebut: Date | null;
+  formationDateFin: Date | null;
+  formationOption: string | null;
   createdAt: Date;
   updatedAt: Date;
-};
-
+}
 
 const CertificateTable: React.FC = () => {
-  const [search, setSearch] = useState('');
-  const [filterType, setFilterType] = useState('All');
+  const [search, setSearch] = useState("");
+  const [filterType, setFilterType] = useState("All");
   const [data, setData] = useState<Certificate[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchCertificates = async () => {
       setLoading(true);
-      setError('');
+      setError("");
       try {
         const certificates = await getCertificates(); // Appel à la Server Action
         setData(certificates);
       } catch (err) {
-        setError('Erreur lors de la récupération des certificats.');
+        setError("Erreur lors de la récupération des certificats.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -44,8 +55,11 @@ const CertificateTable: React.FC = () => {
 
   // Filtrage des données
   const filteredData = data.filter((item) => {
-    const matchesSearch = item.fullName.toLowerCase().includes(search.toLowerCase());
-    const matchesType = filterType === 'All' || item.certificateType === filterType;
+    const matchesSearch = item.fullName
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesType =
+      filterType === "All" || item.formationOption === filterType;
     return matchesSearch && matchesType;
   });
 
@@ -65,7 +79,9 @@ const CertificateTable: React.FC = () => {
     <>
       <Header />
       <div className="p-6 bg-white rounded-lg shadow-lg text-black">
-        <h2 className="text-2xl font-bold text-[#0071bc] mb-6">Historique des certificats</h2>
+        <h2 className="text-2xl font-bold text-[#0071bc] mb-6">
+          Historique des certificats
+        </h2>
         <div className="flex flex-wrap gap-4 mb-6">
           <input
             type="text"
@@ -93,44 +109,55 @@ const CertificateTable: React.FC = () => {
         ) : (
           <div>
             <table className="w-full border-collapse overflow-hidden rounded-lg shadow-lg">
-  <thead className="bg-[#0071bc] text-white">
-    <tr>
-      <th className="p-4 text-left">Nom</th>
-      <th className="p-4 text-left">Type</th>
-      <th className="p-4 text-left">Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {paginatedData.length > 0 ? (
-      paginatedData.map((item) => (
-        <tr key={item.id} className="hover:bg-[#0071bc] hover:text-white transition-colors duration-200">
-          <td className="p-4 border-t">
-            <Link href={`/CertificateTable/${item.id}`} className="block">
-              {item.fullName}
-            </Link>
-          </td>
-          <td className="p-4 border-t">
-            <Link href={`/CertificateTable/${item.id}`} className="block">
-              {item.certificateType}
-            </Link>
-          </td>
-          <td className="p-4 border-t">
-            <Link href={`/CertificateTable/${item.id}`} className="block">
-              {new Date(item.issueDate).toLocaleDateString()}
-            </Link>
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan={3} className="text-center p-6">
-          Aucun certificat trouvé.
-        </td>
-      </tr>
-    )}
-  </tbody>
-</table>
-
+              <thead className="bg-[#0071bc] text-white">
+                <tr>
+                  <th className="p-4 text-left">Nom</th>
+                  <th className="p-4 text-left">Type</th>
+                  <th className="p-4 text-left">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedData.length > 0 ? (
+                  paginatedData.map((item) => (
+                    <tr
+                      key={item.id}
+                      className="hover:bg-[#0071bc] hover:text-white transition-colors duration-200"
+                    >
+                      <td className="p-4 border-t">
+                        <Link
+                          href={`/CertificateTable/${item.id}`}
+                          className="block"
+                        >
+                          {item.fullName}
+                        </Link>
+                      </td>
+                      <td className="p-4 border-t">
+                        <Link
+                          href={`/CertificateTable/${item.id}`}
+                          className="block"
+                        >
+                          {item.formationOption}
+                        </Link>
+                      </td>
+                      <td className="p-4 border-t">
+                        <Link
+                          href={`/CertificateTable/${item.id}`}
+                          className="block"
+                        >
+                          {new Date(item.issueDate).toLocaleDateString()}
+                        </Link>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={3} className="text-center p-6">
+                      Aucun certificat trouvé.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
 
             {/* Pagination */}
             {totalPages > 1 && (
@@ -141,8 +168,8 @@ const CertificateTable: React.FC = () => {
                     onClick={() => handlePageChange(index + 1)}
                     className={`mx-1 px-3 py-1 rounded-lg ${
                       currentPage === index + 1
-                        ? 'bg-[#0071bc] text-white'
-                        : 'bg-gray-200 text-gray-700'
+                        ? "bg-[#0071bc] text-white"
+                        : "bg-gray-200 text-gray-700"
                     } hover:bg-[#005a8c] transition`}
                   >
                     {index + 1}
