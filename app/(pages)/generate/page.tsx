@@ -371,9 +371,9 @@ export default function GenerateCertificates() {
               >
                 {/* Texte dynamique sur le certificat */}
                 <div className="absolute top-[30%] left-[20%] text-left">
-                  <p className="text-xl font-bold text-[#0071bc]">
+                  {/* <p className="text-xl font-bold text-[#0071bc]">
                     {formData.certificateType}
-                  </p>
+                  </p> */}
                   <p className="text-6xl text-center font-bold text-gray-800 mt-2">
                     {formData.fullName}
                   </p>
