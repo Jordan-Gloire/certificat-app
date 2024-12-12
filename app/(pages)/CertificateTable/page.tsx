@@ -42,6 +42,7 @@ const CertificateTable: React.FC = () => {
       try {
         const certificates = await getCertificates(); // Appel à la Server Action
         setData(certificates);
+        // I fixed the bug here
       } catch (err) {
         setError("Erreur lors de la récupération des certificats.");
         console.error(err);
