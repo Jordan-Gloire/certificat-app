@@ -58,10 +58,10 @@ export default function GenerateCertificates() {
         fullName,
         issueDate: formattedIssueDate.toISOString(),
         city,
-        birthDate,
-        formationDateDebut,
-        formationDateFin,
-        formationOption,
+        birthDate: formattedIssueDate.toISOString(),
+        formationDateDebut: formattedIssueDate.toISOString(),
+        formationDateFin: formattedIssueDate.toISOString(),
+        formationOption: formattedIssueDate.toISOString(),
       });
       console.log("Certificat enregistré ", savedCertification);
 
