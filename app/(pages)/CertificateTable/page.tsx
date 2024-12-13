@@ -185,3 +185,4 @@ const CertificateTable: React.FC = () => {
   );
 };
 export default CertificateTable;
+// EVERYTHING ARE GOOD IN LOCA, I CAN PUSH
