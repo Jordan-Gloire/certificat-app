@@ -6,6 +6,7 @@ import { FaFilePdf, FaFileExcel, FaArrowRight } from "react-icons/fa";
 import { addCerti } from "@/app/actions/addCerti";
 import { Bounce, toast, ToastContainer } from "react-toastify"; // Importation de Toastify
 import "react-toastify/dist/ReactToastify.css"; // Importation des styles de Toastify
+import { read, utils } from "xlsx";
 
 export default function GenerateCertificates() {
   const [formData, setFormData] = useState({
@@ -73,7 +74,7 @@ export default function GenerateCertificates() {
       });
 
       // Ajout l'image du certificat comme arrière-plan
-      const imageUrl = "/model-certificat.png"; // Chemin vers l'image du modèle
+      const imageUrl = "/model-certificat.jpg"; // Chemin vers l'image du modèle
       const imgWidth = 842; // Largeur de l'image
       const imgHeight = 595; // Hauteur de l'image
 
@@ -141,7 +142,145 @@ export default function GenerateCertificates() {
       });
     }
   };
+  interface dataFromExcel {
+    fullName: string;
+    issueDate: string;
+    birthDate: string;
+    formationDateDebut: string;
+    formationDateFin: string;
+    formationOption: string;
+    city: string;
+  }
+  // VALIDATION DES DONNEE
+  // const isDataFromExcel = (data: dataFromExcel): data is dataFromExcel => {
+  //   return (
+  //     typeof data.fullName === "string" &&
+  //     typeof data.issueDate === "string" &&
+  //     typeof data.birthDate === "string" &&
+  //     typeof data.formationDateDebut === "string" &&
+  //     typeof data.formationDateFin === "string" &&
+  //     typeof data.formationOption === "string" &&
+  //     typeof data.city === "string"
+  //   );
+  // };
+  // FONCTION L'IMPORT DU FILE EXCEL
 
+  const importExcelFile = async (file: File): Promise<dataFromExcel[]> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const data = event.target?.result;
+        if (!data) return reject("Erreur lors de la lecture du fichier.");
+
+        try {
+          // Lire les données en tant que tableau d'octets
+          const workbook = read(new Uint8Array(data as ArrayBuffer), {
+            type: "array",
+          });
+          const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+          // Transformer les données en JSON brut
+          const rawData = utils.sheet_to_json(
+            sheet
+          ) as unknown as dataFromExcel[];
+
+          // Vérifier si les champs attendus sont présents
+          const requiredFields = [
+            "fullName",
+            "issueDate",
+            "birthDate",
+            "formationDateDebut",
+            "formationDateFin",
+            "formationOption",
+            "city",
+          ];
+
+          // Filtrer les données invalides
+          const validatedData = rawData.filter((row) =>
+            requiredFields.every((field) => field in row)
+          );
+
+          // Vérifier si des données invalides existent
+          if (validatedData.length === 0) {
+            return reject(
+              "Le fichier Excel ne contient pas les champs attendus."
+            );
+          }
+
+          resolve(validatedData as dataFromExcel[]);
+        } catch (error) {
+          console.error("Erreur lors de l'analyse du fichier Excel.", error);
+          toast.error("❌ Erreur lors de l'analyse du fichier Excel.!", {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          reject("Erreur lors de l'analyse du fichier Excel.");
+        }
+      };
+
+      reader.onerror = (error) => reject(error);
+      reader.readAsArrayBuffer(file);
+    });
+  };
+  // const FileUploader = () => {
+  //   const [file, setFile] = useState<File | null>(null); // Stocke l'objet fichier
+  //   const [fileName, setFileName] = useState<string>(""); // Stocke le nom du fichie
+  //   // Gestionnaire pour capturer le fichier sélectionné
+  //   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     const files = e.target.files;
+  //     if (files && files.length > 0) {
+  //       setFile(files[0]); // Met à jour l'objet fichier
+  //       setFileName(files[0].name); // Met à jour le nom du fichier
+  //     }
+  //   };
+  // };
+  const handleImportSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fileInput = e.currentTarget.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    const file = fileInput?.files?.[0];
+    if (file) {
+      try {
+        const data = await importExcelFile(file);
+        console.log("Données importées :", data); // Traitez les données importées ici
+        alert("Importation réussie !");
+      } catch (error) {
+        console.error("Erreur :", error);
+        toast.error(
+          "❌ Le fichier Excel ne contient pas les champs attendus.!",
+          {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          }
+        );
+      }
+    } else {
+      toast.error("❌ Veuillez sélectionner un fichier avant de soumettre !", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      // alert("Veuillez sélectionner un fichier avant de soumettre.");
+    }
+  };
   return (
     <>
       <Header />
@@ -155,7 +294,6 @@ export default function GenerateCertificates() {
             Remplissez les informations ci-dessous pour générer votre
             certificat.
           </p>
-
           <div className="mt-8 max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
@@ -314,42 +452,62 @@ export default function GenerateCertificates() {
                   </div>
 
                   {/* Deuxième bouton : Importer fichier Excel */}
-                  <div className="flex justify-center">
-                    <label
-                      htmlFor="file-upload"
-                      className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2 cursor-pointer"
-                    >
-                      <FaFileExcel className="w-5 h-5" />
-                      <span>Importer fichier Excel</span>
-                      <FaArrowRight className="w-5 h-5" />
-                    </label>
+                  {/* <div className="flex justify-center">
+                      <label
+                        htmlFor="file-upload"
+                        className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2 cursor-pointer"
+                      >
+                        <FaFileExcel className="w-5 h-5" />
+                        <span>Importer fichier Excel</span>
+                        <FaArrowRight className="w-5 h-5" />
+                      </label>
 
-                    <input
-                      id="file-upload"
-                      type="file"
-                      className="hidden"
-                      accept=".xlsx, .xls"
-                      onChange={handleFileChange} // Gestion du changement de fichier
-                    />
-                  </div>
+                      <input
+                        id="file-upload"
+                        type="file"
+                        className="hidden"
+                        accept=".xlsx, .xls"
+                        onChange={handleFileChange} // Gestion du changement de fichier
+                      />
+                    </div> */}
                   {fileName && (
                     <p className="mt-2 text-center text-sm text-gray-700">
                       Fichier sélectionné : {fileName}
                     </p>
                   )}
-
-                  {/* Troisième bouton : Générer le certificat après import */}
-                  <div className="flex justify-center">
-                    <button
-                      type="submit"
-                      className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
-                    >
-                      <FaFilePdf className="w-5 h-5" />
-                      <span>Générer le certificat après import</span>
-                      <FaArrowRight className="w-5 h-5" />
-                    </button>
-                  </div>
                 </div>
+              </div>
+            </form>
+            <ToastContainer /> {/* Conteneur React Toastify */}
+            <form className="mt-4" onSubmit={handleImportSubmit}>
+              {/* Troisième bouton : Générer le certificat après import */}
+              <div className="flex justify-center mb-4">
+                <label
+                  htmlFor="file-upload"
+                  className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2 cursor-pointer"
+                >
+                  <FaFileExcel className="w-5 h-5" />
+                  <span>Importer fichier Excel</span>
+                  <FaArrowRight className="w-5 h-5" />
+                </label>
+
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="hidden"
+                  accept=".xlsx, .xls"
+                  onChange={handleFileChange} // Gestion du changement de fichier
+                />
+              </div>
+              <div className="flex justify-center">
+                <button
+                  type="submit"
+                  className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
+                >
+                  <FaFilePdf className="w-5 h-5" />
+                  <span>Générer le certificat après import</span>
+                  <FaArrowRight className="w-5 h-5" />
+                </button>
               </div>
             </form>
           </div>
@@ -374,13 +532,27 @@ export default function GenerateCertificates() {
                   {/* <p className="text-xl font-bold text-[#0071bc]">
                     {formData.certificateType}
                   </p> */}
-                  <p className="text-6xl text-center font-bold text-gray-800 mt-2">
-                    {formData.fullName}
+                  <p className="text-sm font-bold mt-36">{formData.fullName}</p>
+                  <p className="text-sm font-bold">{formData.birthDate}</p>
+                  <p className="text-sm font-bold mt-2 -ml-4">
+                    {formData.formationOption}
                   </p>
-                  <p className="text-lg text-gray-800 mt-[200px]">
-                    {formData.issueDate}
-                  </p>
-                  <p className="text-lg text-gray-800 mt-2">{formData.city}</p>
+                  <div className="flex gap-2">
+                    <p className="text-sm font-bold mt-[14px] ml-[355px]">
+                      {formData.city}
+                    </p>
+                    <p className="text-sm font-bold mt-[14px]">
+                      {formData.issueDate}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <p className="text-sm font-bold -mt-[68px] ml-[366px]">
+                      {formData.formationDateDebut}
+                    </p>
+                    <p className="text-sm font-bold -mt-[68px] ml-[4px]">
+                      {formData.formationDateFin}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
