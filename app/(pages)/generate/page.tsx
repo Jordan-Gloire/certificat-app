@@ -19,6 +19,7 @@ export default function GenerateCertificates() {
     city: "",
   });
   const [fileName, setFileName] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Gérer l'état de chargement
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -53,6 +54,7 @@ export default function GenerateCertificates() {
     } = formData;
 
     try {
+      setIsLoading(true); // Mettre le bouton en mode chargement
       // Étape 1 : Envoyer les données au backend pour les enregistrer dans la base de données
       const formattedIssueDate = new Date(issueDate);
       const savedCertification = await addCerti({
@@ -140,6 +142,8 @@ export default function GenerateCertificates() {
         progress: undefined,
         theme: "light",
       });
+    } finally {
+      setIsLoading(false); // Arrêter le mode chargement
     }
   };
   interface dataFromExcel {
@@ -443,11 +447,38 @@ export default function GenerateCertificates() {
                   <div className="flex justify-center">
                     <button
                       type="submit"
-                      className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
+                      disabled={isLoading} // Désactiver le bouton pendant le chargement
+                      className="px-8 py-3 text-white bg-[#0071bc] rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2 disabled:opacity-50"
                     >
-                      <FaFilePdf className="w-5 h-5" />
-                      <span>Générer le certificat</span>
-                      <FaArrowRight className="w-5 h-5" />
+                      {isLoading ? (
+                        <svg
+                          className="animate-spin h-5 w-5 mr-2"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 0114.607-5.243l3.131 3.131A12 12 0 004 12z"
+                          ></path>
+                        </svg>
+                      ) : (
+                        <>
+                          <FaFilePdf className="w-5 h-5" />
+                          <span>Générer le certificat</span>
+                          <FaArrowRight className="w-5 h-5" />
+                        </>
+                      )}
                     </button>
                   </div>
 
