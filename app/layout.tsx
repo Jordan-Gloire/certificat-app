@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Head from "next/head";
-
+import PrelineScript from "./components/PrelineScript";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-       <Head>
+      <Head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#3b82f6" />
         <link
@@ -35,15 +35,13 @@ export default function RootLayout({
           sizes="192x192"
           href="/android-chrome-icon-192x192.png"
         />
-        <link
-          rel="apple-touch-icon"
-          href="/apple-touch-icon-192x192.png"
-        />
+        <link rel="apple-touch-icon" href="/apple-touch-icon-192x192.png" />
       </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <PrelineScript />
       </body>
     </html>
   );

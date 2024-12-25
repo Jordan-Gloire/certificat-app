@@ -1,9 +1,9 @@
 "use client";
 import Header from "@/app/components/Header";
 import React, { useState, useEffect } from "react";
-import { getCertificates } from "@/app/actions/getCerti";
-import Link from "next/link";
-
+// import { getCertificates } from "@/app/actions/getCerti";
+// import Link from "next/link";
+import { certificatTable } from "../../data/db";
 // type Certificate = {
 //   id: number;
 //   fullName: string;
@@ -17,21 +17,21 @@ type Certificate = {
   id: number;
   fullName: string;
   city: string;
-  issueDate: Date;
+  issueDate: string;
   birthDate: string | null;
-  formationDateDebut: Date | null;
-  formationDateFin: Date | null;
+  formationDateDebut: string | null;
+  formationDateFin: string | null;
   formationOption: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 const CertificateTable: React.FC = () => {
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("All");
   const [data, setData] = useState<Certificate[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [itemsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -40,8 +40,10 @@ const CertificateTable: React.FC = () => {
       setLoading(true);
       setError("");
       try {
-        const certificates = await getCertificates(); // Appel à la Server Action
-        setData(certificates);
+        // const certificates = await getCertificates(); // Appel à la Server Action
+        setData(certificatTable);
+        console.log(certificatTable);
+
         // I fixed the bug here
       } catch (err) {
         setError("Erreur lors de la récupération des certificats.");
@@ -55,26 +57,26 @@ const CertificateTable: React.FC = () => {
   }, []);
 
   // Filtrage des données
-  const filteredData = data.filter((item) => {
-    const matchesSearch = item.fullName
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    const matchesType =
-      filterType === "All" || item.formationOption === filterType;
-    return matchesSearch && matchesType;
-  });
+  // const filteredData = data.filter((item) => {
+  //   const matchesSearch = item.fullName
+  //     .toLowerCase()
+  //     .includes(search.toLowerCase());
+  //   const matchesType =
+  //     filterType === "All" || item.formationOption === filterType;
+  //   return matchesSearch && matchesType;
+  // });
 
   // Pagination
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  // const paginatedData = filteredData.slice(
+  //   (currentPage - 1) * itemsPerPage,
+  //   currentPage * itemsPerPage
+  // );
 
   // Gestion de la pagination
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (page: number) => {
+  //   setCurrentPage(page);
+  // };
 
   return (
     <>
@@ -118,50 +120,18 @@ const CertificateTable: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginatedData.length > 0 ? (
-                  paginatedData.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-[#0071bc] hover:text-white transition-colors duration-200"
-                    >
-                      <td className="p-4 border-t">
-                        <Link
-                          href={`/CertificateTable/${item.id}`}
-                          className="block"
-                        >
-                          {item.fullName}
-                        </Link>
-                      </td>
-                      <td className="p-4 border-t">
-                        <Link
-                          href={`/CertificateTable/${item.id}`}
-                          className="block"
-                        >
-                          {item.formationOption}
-                        </Link>
-                      </td>
-                      <td className="p-4 border-t">
-                        <Link
-                          href={`/CertificateTable/${item.id}`}
-                          className="block"
-                        >
-                          {new Date(item.issueDate).toLocaleDateString()}
-                        </Link>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={3} className="text-center p-6">
-                      Aucun certificat trouvé.
-                    </td>
+                {data.map((elt, index) => (
+                  <tr key={index}>
+                    <td className="p-4">{elt.fullName}</td>
+                    <td className="p-4">{elt.formationOption}</td>
+                    <td className="p-4">{elt.issueDate}</td>
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
 
             {/* Pagination */}
-            {totalPages > 1 && (
+            {/* {totalPages > 1 && (
               <div className="flex justify-center items-center mt-6">
                 {Array.from({ length: totalPages }, (_, index) => (
                   <button
@@ -177,7 +147,7 @@ const CertificateTable: React.FC = () => {
                   </button>
                 ))}
               </div>
-            )}
+            )} */}
           </div>
         )}
       </div>
