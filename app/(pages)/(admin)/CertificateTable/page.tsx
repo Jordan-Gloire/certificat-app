@@ -114,8 +114,8 @@ const [search, setSearch] = useState<string>("");
         )}
 
         {/* Formulaire de recherche et de filtrage */}
-        <div className="mb-6 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
+        <div className="mb-6 flex flex-col justify-between items-center ">
+          <div className="flex flex-col items-center gap-4 md:flex-row">
             <input
               type="text"
               placeholder="Rechercher par nom..."
@@ -126,7 +126,7 @@ const [search, setSearch] = useState<string>("");
             <select
               value={filterType}
               onChange={handleFilterChange}
-              className="px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-80"  // Ajout de w-80 ici
             >
               <option value="All">Tous</option>
               <option value="Option 1">Secretariat de direction</option>
@@ -134,6 +134,7 @@ const [search, setSearch] = useState<string>("");
               <option value="Option 3">Resources Humaines</option>
             </select>
           </div>
+
         </div>
 
         {/* Liste des certificats */}
