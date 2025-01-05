@@ -9,7 +9,15 @@ import "react-toastify/dist/ReactToastify.css"; // Importation des styles de Toa
 import { read, utils } from "xlsx";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-
+// import {
+//   Select,
+//   SelectContent,
+//   SelectGroup,
+//   SelectItem,
+//   SelectLabel,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select"
 
 export default function GenerateCertificates() {
   const [formData, setFormData] = useState({
@@ -33,7 +41,7 @@ export default function GenerateCertificates() {
   const [showPreview, setShowPreview] = useState(false); // State pour afficher l'aperçu
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement >
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -42,6 +50,7 @@ export default function GenerateCertificates() {
     }));
     setShowPreview(true); // Met à jour l'aperçu dès que l'utilisateur modifie un champ
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -462,11 +471,34 @@ export default function GenerateCertificates() {
                       onChange={handleChange}
                     >
                       <option value="">-- Sélectionnez --</option>
-                      <option value="Option 1">Option 1</option>
-                      <option value="Option 2">Option 2</option>
-                      <option value="Option 3">Option 3</option>
+                      <option value="Comptabilité">Comptabilité</option>
+                      <option value="Ressources humaines">Ressources humaines</option>
+                      <option value="Banque finances">Banque finances</option>
                     </select>
                   </div>
+                  {/* <div className="md:col-span-2">
+                    <label htmlFor="city" className="block text-lg font-medium text-[#0071bc]">
+                      Formations
+                    </label>
+                    <Select
+                      value={formData.formationOption}
+                      required
+                      name="formationOption"
+                      onValueChange={handleChange}
+                    >
+                      <SelectTrigger className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <SelectValue placeholder="-- Sélectionnez --" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Option de la formation</SelectLabel>
+                          <SelectItem value="comptabilité">Comptabilité</SelectItem>
+                          <SelectItem value="ressources humaines">Ressources humaines</SelectItem>
+                          <SelectItem value="assistanat de direction">Assistanat de direction</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div> */}
 
                   {/* Ville avec largeur de 2 colonnes */}
                   <div className="md:col-span-2">
@@ -486,7 +518,34 @@ export default function GenerateCertificates() {
                       <option value="brazzaville">Brazzaville</option>
                     </select>
                   </div>
+
+                  {/* <div className="md:col-span-2">
+                    <label htmlFor="city" className="block text-lg font-medium text-[#0071bc]">
+                      Ville
+                    </label>
+                    <Select
+                      value={formData.city}
+                      required
+                      name="city"
+                      onValueChange={handleChange}
+                    >
+                      <SelectTrigger className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <SelectValue placeholder="-- Sélectionnez --" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Villes</SelectLabel>
+                          <SelectItem value="pointe-noire">Pointe-Noire</SelectItem>
+                          <SelectItem value="brazzaville">Brazzaville</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div> */}
+
+                  
                 </div>
+                
+              
 
                 {/* Bouton de génération */}
                 <div className="mt-6 grid grid-cols-1 gap-4">
