@@ -48,7 +48,7 @@ export default function GenerateCertificates() {
       ...prevData,
       [name]: value,
     }));
-    setShowPreview(true); // Met à jour l'aperçu dès que l'utilisateur modifie un champ
+    setShowPreview(false); // Met à jour l'aperçu dès que l'utilisateur modifie un champ
   };
 
 
@@ -68,17 +68,17 @@ export default function GenerateCertificates() {
     try {
       setIsLoading(true); // Mettre le bouton en mode chargement
       // Étape 1 : Envoyer les données au backend pour les enregistrer dans la base de données
-      const formattedIssueDate = new Date(issueDate);
-      const savedCertification = await addCerti({
-        fullName,
-        issueDate: formattedIssueDate.toISOString(),
-        city,
-        birthDate: formattedIssueDate.toISOString(),
-        formationDateDebut: formattedIssueDate.toISOString(),
-        formationDateFin: formattedIssueDate.toISOString(),
-        formationOption: formattedIssueDate.toISOString(),
-      });
-      console.log("Certificat enregistré ", savedCertification);
+      // const formattedIssueDate = new Date(issueDate);
+      // const savedCertification = await addCerti({
+      //   fullName,
+      //   issueDate: formattedIssueDate.toISOString(),
+      //   city,
+      //   birthDate: formattedIssueDate.toISOString(),
+      //   formationDateDebut: formattedIssueDate.toISOString(),
+      //   formationDateFin: formattedIssueDate.toISOString(),
+      //   formationOption: formattedIssueDate.toISOString(),
+      // });
+      // console.log("Certificat enregistré ", savedCertification);
 
       // Étape 2 : Générer le certificat PDF
       const doc = new jsPDF({
@@ -87,7 +87,7 @@ export default function GenerateCertificates() {
         format: [842, 595], // Taille A4 en pixels
       });
 
-      // Ajout l'image du certificat comme arrière-plan
+      // Ajout de l'image du certificat comme arrière-plan
       const imageUrl = "/model-certificat.jpg"; // Chemin vers l'image du modèle
       const imgWidth = 842; // Largeur de l'image
       const imgHeight = 595; // Hauteur de l'image
@@ -105,15 +105,24 @@ export default function GenerateCertificates() {
           imgHeight
         );
 
-        // Ajouter le texte dynamique
-        doc.setFontSize(20);
-        doc.text(fullName, 200, 300); // Coordonnées pour le nom
-        doc.text(birthDate, 200, 350); // Coordonnées pour le type
-        doc.text(formationDateFin, 200, 350); // Coordonnées pour le type
-        doc.text(formationDateDebut, 200, 350); // Coordonnées pour le type
-        doc.text(formationOption, 200, 350); // Coordonnées pour le type
-        doc.text(issueDate, 200, 400); // Coordonnées pour la date
-        doc.text(city, 200, 450); // Coordonnées pour la ville
+        // Ajouter le texte dynamique avec des positions ajustées
+        doc.setFont("times", "normal"); // Police similaire au certificat
+        doc.setFontSize(16); // Taille de police adaptée
+
+        // Nom
+        doc.text(fullName, 170, 339); // Ajuster la position
+        // Date de naissance
+        doc.text(birthDate, 150, 355);
+        // Option de formation
+        doc.text(formationOption, 145, 386);
+        // Date début de formation
+        doc.text(formationDateDebut, 535, 370); // Ajusté pour être aligné avec "du"
+        // Date fin de formation
+        doc.text(formationDateFin, 610, 370); // Aligné après "au"
+        // Ville
+        doc.text(city, 523, 419); // Aligné avec "Fait à"
+        // Date d'émission
+        doc.text(issueDate ,595, 419); // Aligné après la ville
 
         // Télécharger le certificat
         doc.save("certificat.pdf");
@@ -130,6 +139,7 @@ export default function GenerateCertificates() {
           theme: "light",
           transition: Bounce,
         });
+
         // Réinitialiser le formulaire
         setFormData({
           fullName: "",
@@ -142,6 +152,7 @@ export default function GenerateCertificates() {
         });
       };
       reader.readAsDataURL(img);
+
     } catch (error) {
       console.error("Erreur lors de la génération du certificat :", error);
       toast.error("❌ Une erreur est survenue lors de la génération !", {
@@ -253,14 +264,29 @@ export default function GenerateCertificates() {
             doc.addImage(reader.result as string, "JPEG", 0, 0, 842, 595);
 
             // Ajouter le texte dynamique (données du fichier Excel)
-            doc.setFontSize(20);
-            doc.text(element.fullName, 200, 300);
-            doc.text(formatDate(element.birthDate), 200, 350);
-            doc.text(formatDate(element.formationDateFin), 200, 400);
-            doc.text(formatDate(element.formationDateDebut), 200, 450);
-            doc.text(element.formationOption, 200, 500);
-            doc.text(formatDate(element.issueDate), 200, 550);
-            doc.text(element.city, 200, 600);
+            doc.setFont("times", "normal"); // Police similaire au certificat
+            doc.setFontSize(16);
+            // doc.text(element.fullName, 200, 300);
+            // doc.text(formatDate(element.birthDate), 200, 350);
+            // doc.text(formatDate(element.formationDateFin), 200, 400);
+            // doc.text(formatDate(element.formationDateDebut), 200, 450);
+            // doc.text(element.formationOption, 200, 500);
+            // doc.text(formatDate(element.issueDate), 200, 550);
+            // doc.text(element.city, 200, 600);
+             // Nom
+            doc.text(element.fullName, 170, 339); // Ajuster la position
+            // Date de naissance
+            doc.text(formatDate(element.birthDate), 150, 355);
+            // Option de formation
+            doc.text(formatDate(element.formationOption), 145, 386);
+            // Date début de formation
+            doc.text(formatDate(element.formationDateDebut), 535, 370); // Ajusté pour être aligné avec "du"
+            // Date fin de formation
+            doc.text(formatDate(element.formationDateFin), 610, 370); // Aligné après "au"
+            // Ville
+            doc.text(element.city, 523, 419); // Aligné avec "Fait à"
+            // Date d'émission
+            doc.text(formatDate(element.issueDate),595, 419); // Aligné après la ville
 
             // Créer un blob PDF
             const pdfBlob = doc.output("blob");
@@ -404,7 +430,7 @@ export default function GenerateCertificates() {
                       name="birthDate"
                       value={formData.birthDate}
                       onChange={handleChange}
-                      required
+                      
                       className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -420,7 +446,6 @@ export default function GenerateCertificates() {
                       name="issueDate"
                       value={formData.issueDate}
                       onChange={handleChange}
-                      required
                       className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -436,7 +461,6 @@ export default function GenerateCertificates() {
                       name="formationDateDebut"
                       value={formData.formationDateDebut}
                       onChange={handleChange}
-                      required
                       className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -452,7 +476,6 @@ export default function GenerateCertificates() {
                       name="formationDateFin"
                       value={formData.formationDateFin}
                       onChange={handleChange}
-                      required
                       className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -464,7 +487,6 @@ export default function GenerateCertificates() {
                     </label>
                     <select
                       className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
                       name="formationOption"
                       id="formationOption"
                       value={formData.formationOption}
@@ -507,7 +529,6 @@ export default function GenerateCertificates() {
                     </label>
                     <select
                       className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
                       name="city"
                       id="city"
                       value={formData.city}
@@ -652,24 +673,24 @@ export default function GenerateCertificates() {
                   {/* <p className="text-xl font-bold text-[#0071bc]">
                     {formData.certificateType}
                   </p> */}
-                  <p className="text-sm font-bold mt-36">{formData.fullName}</p>
+                  <p className="text-sm font-bold  ">{formData.fullName}</p>
                   <p className="text-sm font-bold">{formData.birthDate}</p>
-                  <p className="text-sm font-bold mt-2 -ml-4">
+                  <p className="text-sm font-bold ">
                     {formData.formationOption}
                   </p>
                   <div className="flex gap-2">
-                    <p className="text-sm font-bold mt-[14px] ml-[355px]">
+                    <p className="text-sm font-bold">
                       {formData.city}
                     </p>
-                    <p className="text-sm font-bold mt-[14px]">
+                    <p className="text-sm font-bold ">
                       {formData.issueDate}
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <p className="text-sm font-bold -mt-[68px] ml-[366px]">
+                    <p className="text-sm font-bold  ">
                       {formData.formationDateDebut}
                     </p>
-                    <p className="text-sm font-bold -mt-[68px] ml-[4px]">
+                    <p className="text-sm font-bold ">
                       {formData.formationDateFin}
                     </p>
                   </div>
